@@ -16,7 +16,7 @@ import java.io.IOException;
 public class UserJoinServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        Utils.displayView("회원가입","user/join",req,res);
+        Utils.displayView("회원가입", "user/join", req, res);
     }
 
     @Override
