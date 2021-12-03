@@ -1,6 +1,7 @@
 package com.koreait.basic.board;
 
 import com.koreait.basic.Utils;
+import com.koreait.basic.board.model.BoardDTO;
 import com.koreait.basic.board.model.BoardEntity;
 import com.koreait.basic.dao.BoardDAO;
 
@@ -16,8 +17,19 @@ public class BoardRegModServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        int iboard = Utils.getParameterInt(req, "iboard");
         String title = "글등록";
+
+        if(iboard > 0){
+            title = "글수정";
+            if(req.getAttribute("err")==null){
+            BoardDTO param = new BoardDTO();
+            param.setIboard(iboard);
+            req.setAttribute("data", BoardDAO.selBoardDetail(param));
+            }
+        }
         Utils.displayView(title, "board/regmod", req, res);
+
     }
 
     @Override
@@ -27,16 +39,23 @@ public class BoardRegModServlet extends HttpServlet {
             res.sendRedirect("/user/login");
             return;
         }
-
+        int iboard = Utils.getParameterInt(req, "iboard");
         String title = req.getParameter("title");
         String ctnt = req.getParameter("ctnt");
 
+        int result = 0;
         BoardEntity entity = new BoardEntity();
         entity.setTitle(title);
         entity.setCtnt(ctnt);
         entity.setWriter(loginUserPk);
 
-        int result = BoardDAO.insBoardWithPk(entity);
+        if(iboard==0){
+            result = BoardDAO.insBoardWithPk(entity);
+        }else {
+            entity.setIboard(iboard);
+            entity.setWriter(Utils.getLoginUserPk(req));
+            result = BoardDAO.updBoard(entity);
+        }
 
         System.out.println("after-insert-iboard : " + entity.getIboard());
         switch (result) {
@@ -45,6 +64,11 @@ public class BoardRegModServlet extends HttpServlet {
                     res.sendRedirect("/board/detail?iboard=" + entity.getIboard());
                     return;
                 }
+                break;
+            default:
+                req.setAttribute("err","등록/수정에 실패하였습니다.");
+                req.setAttribute("data", entity);
+                doGet(req,res);
                 break;
         }
         res.sendRedirect("/board/list");

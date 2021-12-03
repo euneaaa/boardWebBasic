@@ -13,7 +13,7 @@ public class UserLogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         HttpSession hs = req.getSession();
-        hs.invalidate();
+        hs.removeAttribute("loginUser");
         res.sendRedirect("/board/list");
     }
 }
