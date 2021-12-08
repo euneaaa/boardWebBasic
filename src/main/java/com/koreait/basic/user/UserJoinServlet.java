@@ -43,7 +43,5 @@ public class UserJoinServlet extends HttpServlet {
                 doGet(req,res);
                 break;
         }
-
-        res.sendRedirect("/user/login");
     }
 }

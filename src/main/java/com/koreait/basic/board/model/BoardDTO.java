@@ -7,4 +7,14 @@ import lombok.Setter;
 @Setter
 public class BoardDTO {
     private int iboard;
+    private int page;
+    private int startIdx;
+    private int rowCnt;
+    private int searchType;
+    private String searchText;
+
+    public void setStartIdx(int page) {
+        this.page = page;
+        this.startIdx = (page-1)*rowCnt;
+    }
 }

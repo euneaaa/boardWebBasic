@@ -57,7 +57,51 @@ public class BoardDAO {
         return 0;
     }
 
-    public static List<BoardVO> selBoardList() {
+    private static String getSearchWhereString(BoardDTO param) {
+        if(param.getSearchText() != null && !"".equals(param.getSearchText())) {
+            switch(param.getSearchType()) {
+                case 1: // 제목
+                    return String.format(" WHERE A.title LIKE '%%%s%%'", param.getSearchText());
+                case 2: // 내용
+                    return String.format(" WHERE A.ctnt LIKE '%%%s%%'", param.getSearchText());
+                case 3: // 제목,내용
+                    return String.format(" WHERE A.title LIKE '%%%s%%' OR A.ctnt LIKE '%%%s%%'", param.getSearchText(), param.getSearchText());
+                case 4: // 글쓴이
+                    return String.format(" WHERE B.nm LIKE '%%%s%%'", param.getSearchText());
+                case 5: //전체
+                    return String.format(" WHERE A.title LIKE '%%%s%%' OR A.ctnt LIKE '%%%s%%' OR B.nm LIKE '%%%s%%'"
+                            , param.getSearchText(), param.getSearchText(), param.getSearchText());
+            }
+        }
+        return "";
+    }
+
+    public static int getMaxPageNum(BoardDTO param){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String
+                sql = "SELECT CEIL(count(A.iboard)/?) FROM t_board A inner join t_user B on A.writer = B.iuser";
+        sql += getSearchWhereString(param);
+
+        try {
+            con = DbUtils.getCon();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, param.getRowCnt());
+            rs = ps.executeQuery();
+            if(rs.next()){
+                int maxPageNum = rs.getInt(1);
+                return maxPageNum;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DbUtils.close(con,ps,rs);
+        }
+        return 0;
+    }
+
+    public static List<BoardVO> selBoardList(BoardDTO param) {
         List<BoardVO> list = new ArrayList();
         Connection con = null;
         PreparedStatement ps = null;
@@ -65,12 +109,14 @@ public class BoardDAO {
         String sql = "SELECT A.iboard, A.title, A.writer, A.hit, A.rdt, B.nm as writerNm " +
                 " FROM t_board A " +
                 " INNER JOIN t_user B " +
-                " ON A.writer = B.iuser " +
-                " ORDER BY A.iboard DESC ";
-
+                " ON A.writer = B.iuser ";
+                sql += getSearchWhereString(param);
+                sql += " ORDER BY A.iboard DESC LIMIT ?,? ";
         try {
             con = DbUtils.getCon();
             ps = con.prepareStatement(sql);
+            ps.setInt(1,param.getStartIdx());
+            ps.setInt(2,param.getRowCnt());
             rs = ps.executeQuery();
             while(rs.next()) {
                 int iboard = rs.getInt("iboard");

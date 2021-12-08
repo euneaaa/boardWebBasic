@@ -1,8 +1,10 @@
 package com.koreait.basic.board;
 
 import com.koreait.basic.Utils;
+import com.koreait.basic.board.model.BoardCmtDTO;
 import com.koreait.basic.board.model.BoardDTO;
 import com.koreait.basic.board.model.BoardVO;
+import com.koreait.basic.dao.BoardCmtDAO;
 import com.koreait.basic.dao.BoardDAO;
 import com.koreait.basic.user.model.LoginResult;
 import com.koreait.basic.user.model.UserEntity;
@@ -20,10 +22,16 @@ public class BoardDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         BoardDTO param = new BoardDTO();
+        int nohits = Utils.getParameterInt(req, "nohits");
         int iboard = Utils.getParameterInt(req,"iboard");
         param.setIboard(iboard);
         BoardVO data = BoardDAO.selBoardDetail(param);
-        if(Utils.getLoginUserPk(req)!=data.getWriter()){
+
+        BoardCmtDTO cmtParam = new BoardCmtDTO();
+        cmtParam.setIboard(iboard);
+        req.setAttribute("cmtList", BoardCmtDAO.selBoardCmtList(cmtParam));
+
+        if(data.getWriter() != Utils.getLoginUserPk(req) && nohits != 1){
             BoardDAO.updBoardHitup(param);
         }
         req.setAttribute("detail", data);
