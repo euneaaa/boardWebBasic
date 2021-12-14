@@ -125,10 +125,12 @@ public class BoardDAO {
                 int hit = rs.getInt("hit");
                 String rdt = rs.getString("rdt");
                 String writerNm = rs.getString("writerNm");
+                int countcmt = BoardCmtDAO.countCmt(iboard);
                 BoardVO vo = BoardVO.builder()
                         .iboard(iboard)
                         .title(title)
                         .writer(writer)
+                        .countcmt(countcmt)
                         .hit(hit)
                         .rdt(rdt)
                         .writerNm(writerNm)

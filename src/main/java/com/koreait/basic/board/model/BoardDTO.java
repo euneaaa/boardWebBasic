@@ -12,6 +12,7 @@ public class BoardDTO {
     private int rowCnt;
     private int searchType;
     private String searchText;
+    private int loginUserPk;
 
     public void setStartIdx(int page) {
         this.page = page;

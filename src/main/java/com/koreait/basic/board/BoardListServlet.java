@@ -1,7 +1,9 @@
 package com.koreait.basic.board;
 
 import com.koreait.basic.Utils;
+import com.koreait.basic.board.model.BoardCmtDTO;
 import com.koreait.basic.board.model.BoardDTO;
+import com.koreait.basic.dao.BoardCmtDAO;
 import com.koreait.basic.dao.BoardDAO;
 
 import javax.servlet.ServletException;
@@ -27,6 +29,7 @@ public class BoardListServlet extends HttpServlet {
         param.setStartIdx(page);
         req.setAttribute("maxPageNum", BoardDAO.getMaxPageNum(param));
         req.setAttribute("list", BoardDAO.selBoardList(param));
+
 
         Utils.displayView("게시판", "board/list", req, res);
     }

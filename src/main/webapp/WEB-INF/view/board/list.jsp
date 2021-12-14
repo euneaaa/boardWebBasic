@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<link rel="stylesheet" href="/res/css/board/list.css?ver=10">
+<link rel="stylesheet" href="/res/css/board/list.css?ver=15">
 <div>
     <form action="/board/list" method="get" id="searchFrm" class="searchheader">
         <div>
@@ -33,7 +33,7 @@
         <div>
             <table class="boardTable">
                 <colgroup>
-                    <col width="10%">
+                    <col width="8%">
                     <col>
                     <col width="5%">
                     <col width="10%">
@@ -57,7 +57,11 @@
                     </c:if>
                     <tr class="record" onclick="moveToDetail(${item.iboard});">
                         <td>${item.iboard}</td>
-                        <td>${eachTitle}</td>
+                        <td>${eachTitle}
+                            <c:if test="${item.countcmt != 0}">
+                            <input class="cmtbtn" type="button" value="${item.countcmt}">
+                            </c:if>
+                        </td>
                         <td>${item.hit}</td>
                         <td>${eachwriterNm}</td>
                         <td>${item.rdt}</td>

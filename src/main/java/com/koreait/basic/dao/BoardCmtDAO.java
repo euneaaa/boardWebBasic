@@ -4,6 +4,7 @@ import com.koreait.basic.DbUtils;
 import com.koreait.basic.board.model.BoardCmtDTO;
 import com.koreait.basic.board.model.BoardCmtEntity;
 import com.koreait.basic.board.model.BoardCmtVO;
+import com.koreait.basic.board.model.BoardDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -77,6 +78,46 @@ public class BoardCmtDAO {
             e.printStackTrace();
         } finally {
             DbUtils.close(con, ps);
+        }
+        return 0;
+    }
+
+    public static int updBoardCmt(BoardCmtEntity entity){
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql ="UPDATE t_board_cmt SET ctnt = ? WHERE icmt = ? AND writer = ? ";
+        try {
+            con = DbUtils.getCon();
+            ps = con.prepareStatement(sql);
+            ps.setString(1,entity.getCtnt());
+            ps.setInt(2,entity.getIcmt());
+            ps.setInt(3,entity.getWriter());
+            return ps.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DbUtils.close(con,ps);
+        }
+        return 0;
+    }
+
+    public static int countCmt(int iboard){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sql = "SELECT COUNT(*) FROM t_board_cmt WHERE iboard = ?";
+        try {
+            con = DbUtils.getCon();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, iboard);
+            rs= ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DbUtils.close(con, ps, rs);
         }
         return 0;
     }
