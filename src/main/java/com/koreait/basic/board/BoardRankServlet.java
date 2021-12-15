@@ -1,6 +1,7 @@
 package com.koreait.basic.board;
 
 import com.koreait.basic.Utils;
+import com.koreait.basic.dao.BoardCmtDAO;
 import com.koreait.basic.dao.BoardRankDAO;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,14 @@ public class BoardRankServlet extends HttpServlet {
             case "1":
                 title = "조회수 Top 10";
                 req.setAttribute("list", BoardRankDAO.selBoardHitsRankList());
+                break;
+            case "2":
+                title = "댓글수 Top 10";
+                req.setAttribute("list", BoardRankDAO.selBoardCmtRankList());
+                break;
+            case "3":
+                title = "좋아요 Top 10";
+                req.setAttribute("list", BoardRankDAO.selBoardHeartRankList());
                 break;
         }
         Utils.displayView(title, "board/rank", req, res);

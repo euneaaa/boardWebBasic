@@ -15,9 +15,12 @@
             <ul class="topMenu">
                 <li><a href="/board/list">게시판</a></li>
                 <li><a href="/board/rank?type=1">조회수 Top 10</a></li>
+                <li><a href="/board/rank?type=2">댓글수 Top 10</a></li>
+                <li><a href="/board/rank?type=3">좋아요 Top 10</a></li>
             <c:if test="${sessionScope.loginUser != null}">
                 <li><a href="/board/regmod">글쓰기</a></li>
                 <li><a href="/user/logout">로그아웃</a></li>
+                <li><a href="/user/profile">마이페이지</a> </li>
                 <li>${sessionScope.loginUser.nm}(${sessionScope.loginUser.uid})님 환영합니다.</li>
             </c:if>
             <c:if test="${sessionScope.loginUser == null}">
@@ -35,8 +38,10 @@
     <c:if test="${requestScope.err != null}">
         <script>
             var body = document.querySelector('body');
-            body.onload = function (){
-                alert('<c:out value="${requestScope.err}"/>')
+            body.onload = function() {
+                setTimeout(function() {
+                    alert('<c:out value="${requestScope.err}"/>');
+                }, 300);
             };
         </script>
     </c:if>

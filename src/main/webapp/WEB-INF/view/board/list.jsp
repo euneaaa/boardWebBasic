@@ -55,6 +55,11 @@
                     <c:if test="${param.searchType != null&& param.searchType == 4 || param.searchType == 5}">
                         <c:set var="eachwriterNm" value="${fn:replace(eachwriterNm, param.searchText, '<mark>' += param.searchText += '</mark>')}" />
                     </c:if>
+                    <c:set var="pImg" value="defaultProfile.jpg"/>
+                    <c:if test="${item.profileImg !=null}">
+                        <c:set var="pImg" value="profile/${item.writer}/${item.profileImg}"/>
+                    </c:if>
+                    
                     <tr class="record" onclick="moveToDetail(${item.iboard});">
                         <td>${item.iboard}</td>
                         <td>${eachTitle}
@@ -63,7 +68,7 @@
                             </c:if>
                         </td>
                         <td>${item.hit}</td>
-                        <td>${eachwriterNm}</td>
+                        <td><div class="circular--img circular--size40"><img src="/res/img/${pImg}"></div>${eachwriterNm}</td>
                         <td>${item.rdt}</td>
                     </tr>
                 </c:forEach>
