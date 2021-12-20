@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<link rel="stylesheet" href="/res/css/board/detail.css?ver=2">
+<link rel="stylesheet" href="/res/css/board/detail.css?ver=3">
 <div>
     <c:if test="${sessionScope.loginUser.iuser==requestScope.detail.writer}">
     <div>
@@ -20,9 +20,13 @@
             </c:choose>
         </div>
     </c:if>
+    <c:set var="pImg" value="defaultProfile.jpg"/>
+    <c:if test="${requestScope.detail.profileImg !=null}">
+        <c:set var="pImg" value="profile/${requestScope.detail.writer}/${requestScope.detail.profileImg}"/>
+    </c:if>
 <div> 번호 ${requestScope.detail.iboard}</div>
 <div><b> ${requestScope.detail.title}</b></div>
-<div> 작성자 : ${requestScope.detail.writerNm}</div>
+<div> 작성자 : <div class="circular--img circular--size20"><img src="/res/img/${pImg}"></div>${requestScope.detail.writerNm}</div>
 <div> ${requestScope.detail.rdt}    조회수 : ${requestScope.detail.hit}</div>
 <div> ${requestScope.detail.ctnt}</div>
 <br></br>
@@ -35,7 +39,7 @@
     </form>
     </div>
     </c:if>
-    <div style="margin-top: 10px"> 댓글 목록
+    <div style="margin-top: 10px"> 댓글 목록 ${requestScope.detail.countcmt}
         <table class="cmtTable">
             <colgroup>
                 <col>
@@ -44,9 +48,13 @@
                 <col width="5%">
             </colgroup>
             <c:forEach items="${requestScope.cmtList}" var="item">
+                <c:set var="pImg" value="defaultProfile.jpg"/>
+                <c:if test="${item.profileImg !=null}">
+                    <c:set var="pImg" value="profile/${item.writer}/${item.profileImg}"/>
+                </c:if>
                 <tr>
                     <td>${item.ctnt}</td>
-                    <td>${item.writerNm}</td>
+                    <td><div><div class="circular--img circular--size40"><img src="/res/img/${pImg}"></div>${item.writerNm}</div></td>
                     <td>${item.rdt}</td>
                     <td>
                         <c:if test="${sessionScope.loginUser.iuser==item.writer}">

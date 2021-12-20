@@ -7,10 +7,10 @@
     </c:if>
     <div><img class="circular--img circular--size300" src="/res/img/${pImg}"></div>
     <div>
-        <div>아이디 : ${requestScope.data.uid}</div>
-        <div>이름 : ${requestScope.data.nm}</div>
-        <div>성별 : ${requestScope.data.gender}</div>
-        <div>가입일 : ${requestScope.data.rdt}</div>
+        <div>아이디 : ${sessionScope.loginUser.uid}</div>
+        <div>이름 : ${sessionScope.loginUser.nm}</div>
+        <div>성별 : ${sessionScope.loginUser.gender}</div>
+        <div>가입일 : ${sessionScope.loginUser.rdt}</div>
     </div>
     <div>
         <form action="/user/profile" method="post" enctype="multipart/form-data">

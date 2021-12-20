@@ -13,7 +13,7 @@ public class BoardRankDAO {
     public static List<BoardVO> selBoardHitsRankList() {
         List<BoardVO> list = new ArrayList<>();
         String sql = " SELECT A.iboard, A.title, A.writer, A.rdt, A.hit as cnt " +
-                " , B.nm AS writerNm " +
+                " , B.nm AS writerNm , B.profileImg " +
                 " FROM t_board A " +
                 " INNER JOIN t_user B " +
                 " ON A.writer = B.iuser " +
@@ -40,6 +40,7 @@ public class BoardRankDAO {
                         .cnt(rs.getInt("cnt"))
                         .rdt(rs.getString("rdt"))
                         .writerNm(rs.getString("writerNm"))
+                        .profileImg(rs.getString("profileImg"))
                         .countcmt(BoardCmtDAO.countCmt(rs.getInt("iboard")))
                         .build();
                 list.add(vo);
@@ -54,7 +55,7 @@ public class BoardRankDAO {
     public static List<BoardVO> selBoardCmtRankList() {
         List<BoardVO> list = new ArrayList<>();
         String sql = " SELECT A.iboard, A.title, A.writer, A.rdt, C.cnt " +
-                " , B.nm AS writerNm " +
+                " , B.nm AS writerNm , B.profileImg " +
                 " FROM t_board A " +
                 " INNER JOIN t_user B " +
                 " ON A.writer = B.iuser " +
@@ -71,7 +72,7 @@ public class BoardRankDAO {
     public static List<BoardVO> selBoardHeartRankList() {
         List<BoardVO> list = new ArrayList<>();
         String sql = " SELECT A.iboard, A.title, A.writer, A.rdt, C.cnt " +
-                " , B.nm AS writerNm " +
+                " , B.nm AS writerNm , B.profileImg " +
                 " FROM t_board A " +
                 " INNER JOIN t_user B " +
                 " ON A.writer = B.iuser " +

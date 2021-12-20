@@ -13,4 +13,5 @@ public class BoardCmtVO {
     private int writer;
     private String rdt;
     private String writerNm;
+    private String profileImg;
 }

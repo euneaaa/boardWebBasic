@@ -6,6 +6,8 @@ import com.koreait.basic.board.model.BoardEntity;
 import com.koreait.basic.board.model.BoardVO;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,6 +129,7 @@ public class BoardDAO {
                 String writerNm = rs.getString("writerNm");
                 String profileImg = rs.getString("profileImg");
                 int countcmt = BoardCmtDAO.countCmt(iboard);
+                boolean showNew = BoardDAO.showRdt(iboard);
                 BoardVO vo = BoardVO.builder()
                         .iboard(iboard)
                         .title(title)
@@ -136,6 +139,7 @@ public class BoardDAO {
                         .rdt(rdt)
                         .writerNm(writerNm)
                         .profileImg(profileImg)
+                        .showNew(showNew)
                         .build();
                 list.add(vo);
             }
@@ -153,7 +157,7 @@ public class BoardDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String sql = "SELECT A.iboard, A.title, A.writer, A.ctnt, A.hit, A.rdt, B.nm as writerNm " +
+        String sql = "SELECT A.iboard, A.title, A.writer, A.ctnt, A.hit, A.rdt, B.nm as writerNm, B.profileImg  " +
                 " FROM t_board A " +
                 " INNER JOIN t_user B " +
                 " ON A.writer = B.iuser WHERE iboard = ?";
@@ -170,6 +174,8 @@ public class BoardDAO {
                 int hit = rs.getInt("hit");
                 String rdt = rs.getString("rdt");
                 String writerNm = rs.getString("writerNm");
+                String profileImg = rs.getString("profileImg");
+                int countcmt = BoardCmtDAO.countCmt(iboard);
                 vo = BoardVO.builder()
                         .iboard(iboard)
                         .title(title)
@@ -178,6 +184,8 @@ public class BoardDAO {
                         .hit(hit)
                         .rdt(rdt)
                         .writerNm(writerNm)
+                        .profileImg(profileImg)
+                        .countcmt(countcmt)
                         .build();
                 return vo;
             }
@@ -226,7 +234,7 @@ public class BoardDAO {
     public static int updBoard(BoardEntity entity){
         Connection con = null;
         PreparedStatement ps = null;
-        String sql = "UPDATE t_board SET title =?, ctnt =? WHERE iboard =? AND writer =?";
+        String sql = "UPDATE t_board SET title =?, ctnt =? ,mdt WHERE iboard =? AND writer =?";
         try {
             con = DbUtils.getCon();
             ps = con.prepareStatement(sql);
@@ -241,5 +249,27 @@ public class BoardDAO {
             DbUtils.close(con,ps);
         }
         return 0;
+    }
+
+    public static boolean showRdt (int iboard){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sql = "SELECT DATE_FORMAT(rdt, '%Y-%m-%d') AS rdt FROM t_board WHERE iboard=? ";
+        try {
+            con = DbUtils.getCon();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1,iboard);
+            rs= ps.executeQuery();
+            if(rs.next()){
+            String rdt = rs.getString(1);
+            LocalDate day = LocalDate.parse(rdt);
+            return day.isAfter(LocalDate.now().minusDays(2));}
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DbUtils.close(con,ps, rs);
+        }
+        return false;
     }
 }

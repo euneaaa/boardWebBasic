@@ -38,7 +38,7 @@ public class BoardCmtDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String sql = "SELECT A.icmt, A.ctnt, A.writer, A.rdt, B.nm AS writerNm " +
+        String sql = "SELECT A.icmt, A.ctnt, A.writer, A.rdt, B.nm AS writerNm, B.profileImg " +
                 "FROM t_board_cmt A " +
                 "INNER JOIN t_user B ON A.writer = B.iuser WHERE A.iboard = ? ORDER BY A.icmt ASC";
         try {
@@ -53,6 +53,7 @@ public class BoardCmtDAO {
                         .writer(rs.getInt("writer"))
                         .rdt(rs.getString("rdt"))
                         .writerNm(rs.getString("writerNm"))
+                        .profileImg(rs.getString("profileImg"))
                         .build();
                 list.add(vo);
             }

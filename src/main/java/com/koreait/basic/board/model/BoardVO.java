@@ -15,6 +15,7 @@ public class BoardVO {
     private String rdt;
     private String mdt;
     private int countcmt;
+    private boolean showNew;
 
     private String writerNm;
     private String profileImg;

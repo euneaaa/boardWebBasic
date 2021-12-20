@@ -66,9 +66,14 @@
                             <c:if test="${item.countcmt != 0}">
                             <input class="cmtbtn" type="button" value="${item.countcmt}">
                             </c:if>
+                            <c:if test="${item.showNew==true}">
+                            <input class="newbtn" type="button" value="new">
+                            </c:if>
                         </td>
                         <td>${item.hit}</td>
-                        <td><div class="circular--img circular--size40"><img src="/res/img/${pImg}"></div>${eachwriterNm}</td>
+                        <td><div class="writerImg"><div class="circular--img circular--size40"><img src="/res/img/${pImg}"></div>${eachwriterNm}</div>
+                        </td>
+
                         <td>${item.rdt}</td>
                     </tr>
                 </c:forEach>
