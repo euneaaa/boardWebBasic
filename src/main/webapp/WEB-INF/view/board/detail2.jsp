@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <link rel="stylesheet" href="/res/css/board/detail.css">
 <div>
-    <c:if test="${sessionScope.loginUser.iuser == requestScope.detail.writer}">
+    <c:if test="${sessionScope.loginUser.iuser == requestScope.data.writer}">
         <div>
             <a href="/board/del?iboard=${requestScope.detail.iboard}">
                 <button>삭제</button>
@@ -35,8 +35,7 @@
 
     <c:if test="${sessionScope.loginUser != null}">
         <div>
-            <form action="/board/cmt/reg" method="post">
-                <input type="hidden" name="iboard" value="${requestScope.detail.iboard}">
+            <form id="cmtNewFrm">
                 <input type="text" name="ctnt" placeholder="댓글 내용">
                 <input type="submit" value="댓글달기">
             </form>

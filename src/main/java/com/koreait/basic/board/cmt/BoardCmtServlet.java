@@ -26,14 +26,14 @@ public class BoardCmtServlet extends HttpServlet {
         BoardCmtDTO cmtParam = new BoardCmtDTO();
         cmtParam.setIboard(iboard);
 
-        List<BoardCmtVO> cmtlist = BoardCmtDAO.selBoardCmtList(cmtParam);
+        List<BoardCmtVO> list = BoardCmtDAO.selBoardCmtList(cmtParam);
 
         Gson gson = new Gson();
 
         res.setContentType("application/json;charset=UTF-8");
         res.setCharacterEncoding("UTF-8");
         PrintWriter out = res.getWriter();
-        out.print(gson.toJson(cmtlist));
+        out.print(gson.toJson(list));
         out.flush();
     }
 
@@ -53,6 +53,12 @@ public class BoardCmtServlet extends HttpServlet {
         switch(proc) {
             case "upd":
                 result = BoardCmtDAO.updBoardCmt(entity); //writer, icmt, ctnt
+                break;
+            case "del":
+                result = BoardCmtDAO.delBoardCmt(entity); //writer, icmt
+                break;
+            case "ins":
+                result = BoardCmtDAO.insBoardCmt(entity); //writer, iboard, ctnt
                 break;
         }
         res.setContentType("application/json");

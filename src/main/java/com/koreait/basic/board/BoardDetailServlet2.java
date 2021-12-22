@@ -1,7 +1,7 @@
 package com.koreait.basic.board;
 
 import com.koreait.basic.Utils;
-import com.koreait.basic.board.cmt.model.BoardCmtDTO;
+import com.koreait.basic.board.model.BoardCmtDTO;
 import com.koreait.basic.board.model.BoardDTO;
 import com.koreait.basic.board.model.BoardHeartEntity;
 import com.koreait.basic.board.model.BoardVO;
@@ -26,7 +26,7 @@ public class BoardDetailServlet2 extends HttpServlet {
         param.setIboard(iboard);
 
         BoardVO data = BoardDAO.selBoardDetail(param);
-        req.setAttribute("data", data);
+        req.setAttribute("detail", data);
 
         int loginUserPk = Utils.getLoginUserPk(req);
         if(loginUserPk > 0) {
@@ -36,7 +36,7 @@ public class BoardDetailServlet2 extends HttpServlet {
             req.setAttribute("isHeart", BoardHeartDAO.selIsHeart(hbEntity));
         }
         if(data.getWriter() != loginUserPk && nohits != 1) { //로그인 안 되어 있으면 0, 로그인 되어 있으면 pk값
-            BoardDAO.updBoardHitUp(param);
+            BoardDAO.updBoardHitup(param);
         }
         Utils.displayView(data.getTitle(), "board/detail2", req, res);
     }
