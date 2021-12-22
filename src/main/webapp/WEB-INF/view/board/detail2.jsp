@@ -56,4 +56,4 @@
         </form>
     </div>
 </div>
-<script src="/res/js/board/detail2.js?ver=1"></script>
+<script src="/res/js/board/detail2.js?ver=2"></script>
